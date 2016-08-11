@@ -1,0 +1,13 @@
+{
+  "name": "neato-server",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Server for nodejs control of robot",
+  "main": "neato-server.js",
+  "author": "Nik Martelaro <nmartelaro@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "keypress": "^0.2.1",
+    "serialport": "^4.0.1"
+  }
+}
