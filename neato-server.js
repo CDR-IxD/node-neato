@@ -1,5 +1,27 @@
 var SerialPort = require("serialport");
 var keypress = require('keypress');
+var server = require('http').createServer();
+var io = require('socket.io')(server);
+
+// Socket server
+io.on('connection', function(client){
+  console.log("Client Connected");
+  
+  client.on('info', function(data){
+    console.log("info:", data);
+    drive(10,10,100);
+  });
+
+  //drive messages
+  client.on('drive', function(data){
+    console.log("drive:", data);
+    drive(data.LWheelDist, data.RWheelDist, data.Speed);
+  });
+
+  client.on('disconnect', function(){});
+});
+server.listen(3000);
+
 
 // make `process.stdin` begin emitting "keypress" events
 keypress(process.stdin);
@@ -7,7 +29,7 @@ keypress(process.stdin);
 // listen for the "keypress" event
 process.stdin.on('keypress', function (ch, key) {
   //console.log('got "keypress"', key);
-  drive(key);
+  driveKey(key);
   if (key && key.ctrl && key.name == 'c') {
     process.stdin.exit();
   }
@@ -43,9 +65,17 @@ function testPath() {
   port.write('SetMotor LWheelDist 500 RWheelDist 500 Speed 50' + '\n');
 }
 
+// drive the robot from messsages
+function drive(LWheelDist, RWheelDist, Speed) {
+  console.log('SetMotor LWheelDist ' + LWheelDist + 
+             ' RWheelDist ' + RWheelDist + ' Speed ' + Speed + '\n')
+  port.write('SetMotor LWheelDist ' + LWheelDist + 
+             ' RWheelDist ' + RWheelDist + ' Speed ' + Speed + '\n');
+}
+
 
 //drive the robot with keypresses
-function drive(key) {
+function driveKey(key) {
   var dist = 20;
   switch (key.name) {
     case 'w': //fwd
