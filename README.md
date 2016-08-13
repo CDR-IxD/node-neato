@@ -11,9 +11,17 @@ This code acts as a NodeJS based server to control a Neato Botvac D Series. The 
 - Have a controller connect to the server and send commands to control the bot OR control using the command line to test drive.
 - Ctrl+C to stop server
 
+## Server Messages
+**drive**
+
+This message will call the `drive()` function and pass along the message data to drive the robot. The message should contain a JSON `data` packet comprised of 3 integers.
+
+`data = {LWheelDist : [mm], RWheelDist : [mm], Speed : [mm]}`
+
 ## Implemented Commands
 
 **SetMotors**
+
 `SetMotors LWheelDist [mm] RWheelDist [mm] Speed [mm/s]`
 
 The `SetMotors` command will drive the a set distance for each wheel [in mm] at a specific speed [in mm/s]. This is a little odd since you don't have direct control over the speed of the motors. Instead, you need to control the distance and set the speed to turn the robot. Here are some examples commands:
